@@ -25,7 +25,7 @@
  	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
  
-//[csvToList url="YourFolderID" sol="Grid or List" type="" ]
+//[csvToList url="csvurl" sol="sol" type="foldername" ]
  
 function sol_shortcode($atts, $content=null) {
     extract(shortcode_atts( array(
@@ -33,7 +33,7 @@ function sol_shortcode($atts, $content=null) {
          'sol' => '',
          'type' => '',
     ), $atts)); 
-    $return_string = '<ul>';
+    $return_string = '<ul id="sols">';
     $substrLength = strlen($sol);
             $csv = array_map('str_getcsv', file($file));
             array_walk($csv, function(&$a) use ($csv) {
