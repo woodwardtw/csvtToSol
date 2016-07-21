@@ -34,25 +34,32 @@ function sol_shortcode($atts, $content=null) {
          'sol' => '', //SOL needed
          'type' => '', //type specified
     ), $atts)); 
-    $return_string = '<ul>';
+    
     $substrLength = strlen($sol); //how long is the SOL 
             $csv = array_map('str_getcsv', file($file));
             array_walk($csv, function(&$a) use ($csv) {
             $a = array_combine($csv[0], $a);
                                     });
+            $i = 0;         
             foreach($csv as $item) {
                 $name = $item['Name'];
-                $short = substr($name, 0, $substrLength); //start the substring selection after the SOL length
+                $folder = $item['FolderB']; //gets enclosing folder title     
+                $fullSOL = $item['FolderA'];           
+                $short = substr($fullSOL, 0, $substrLength); //start the substring selection after the SOL length
                 $download = $item['Download'];
                 $description = $item['Description'];
-                $folder = $item['Folder']; //gets enclosing folder title
                 $preview = $item['URL'];
                 //if the $short variable = the requested shortcode SOL and the $folder = the requested type then spit it out
                 if ($short == $sol && $folder == $type){
+                    if ($i == 0){
+                        $return_string .= '<div class="skiplinks"><h2>' . $folder .'</h2><ul>';
+                    }
                 $return_string .=  '<li><a href="' . $download . '">' . $name . '</a> - ' . $description . ' - <a href="' . $preview . '">preview</a></li>';
+                $i++;
                 }
             }
-   $return_string .= '</ul>';
-   return $return_string;
+
+   $return_string .= '</ul></div>';
+   return  $return_string ;
 }
 add_shortcode( 'csvToList', 'sol_shortcode' );
